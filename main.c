@@ -13,18 +13,17 @@ int main(int argc, char **argv)
     }
 
     size_t len = strlen(argv[1]) + 1 + sizeof(".out");
-    char *out = malloc(sizeof(char) * len);
+    char *out  = malloc(sizeof(char) * len);
 
     strcpy(out, argv[1]);
     strcat(out, ".out");
 
     FILE *fin  = fopen(argv[1], "rb");
-    FILE *fout = fopen(out, "wb");
+    FILE *fout = fopen(out,     "wb");
 
     char c;
-    size_t bytes;
 
-    while ((bytes = fread(&c, sizeof(char), 1, fin))) {
+    while (fread(&c, sizeof(char), 1, fin)) {
         c ^= 0x64;
         fwrite(&c, sizeof(char), 1, fout);
     }
