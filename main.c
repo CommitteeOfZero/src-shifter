@@ -7,13 +7,14 @@
 
 int main(int argc, char **argv)
 {
-    if (argc < 2) {
-        printf("usage: src-shifter <in-file>.src");
+    if (argc < 2)
+    {
+        printf("usage: src-shifter <in-file>.src\n");
         return 0;
     }
 
-    size_t len = strlen(argv[1]) + 1 + sizeof(".out");
-    char *out  = malloc(sizeof(char) * len);
+    size_t len = strlen(argv[1]) + sizeof(".out");
+    char  *out = malloc(len);
 
     strcpy(out, argv[1]);
     strcat(out, ".out");
@@ -21,12 +22,8 @@ int main(int argc, char **argv)
     FILE *fin  = fopen(argv[1], "rb");
     FILE *fout = fopen(out,     "wb");
 
-    char c;
-
-    while (fread(&c, sizeof(char), 1, fin)) {
-        c ^= 0x64;
-        fwrite(&c, sizeof(char), 1, fout);
-    }
+    // to encrypt or decrypt, xor all bytes by 0x64
+    for(int c; (c = fgetc(fin)) != EOF; fputc(c ^ 0x64, fout));
 
     printf("wrote to %s\n", out);
     return 0;
